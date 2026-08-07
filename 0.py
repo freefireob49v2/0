@@ -578,8 +578,10 @@ class Companion:
 
     def __credentialPrint(self, wps_pin=None, wpa_psk=None, essid=None):
         print(f"[+] WPS PIN: '{wps_pin}'")
-        print(f"[+] WPA PSK: '{wpa_psk}'")
-        print(f"[+] AP SSID: '{essid}'")
+        print()
+        print(f"\033[92m[✓] Wi-Fi NAME \033[00m: '{essid}'")
+        print(f"\033[92m[✓] PASSWORD   \033[00m: '{wpa_psk}'")
+        print()
 
     def __saveResult(self, bssid, essid, wps_pin, wpa_psk):
         if not os.path.exists(self.reports_dir):
@@ -963,37 +965,33 @@ class WiFiScanner:
             return text
 
         if self.vuln_list:
-            print('Network marks: {1} {0} {2} {0} {3}'.format(
+            print(' NOTS: {1} {0} {2}'.format(
                 '|',
-                colored('Possibly vulnerable', color='green'),
-                colored('WPS locked', color='red'),
-                colored('Already stored', color='yellow')
+                colored('WPS UNLOCK', color='green'),
+                colored('WPS LOCK', color='red')
             ))
-        print('Networks list:')
-        print('{:<4} {:<18} {:<25} {:<8} {:<4} {:<27} {:<}'.format(
-            '#', 'BSSID', 'ESSID', 'Sec.', 'PWR', 'WSC device name', 'WSC model'))
-
+            print()
         network_list_items = list(network_list.items())
         if args.reverse_scan:
             network_list_items = network_list_items[::-1]
         for n, network in network_list_items:
-            number = f'{n})'
+            number = f' [{n}]'
             model = '{} {}'.format(network['Model'], network['Model number'])
             essid = truncateStr(network['ESSID'], 25)
             deviceName = truncateStr(network['Device name'], 27)
-            line = '{:<4} {:<18} {:<25} {:<8} {:<4} {:<27} {:<}'.format(
-                number, network['BSSID'], essid,
+            line = '{:<4} {}'.format(
+                number, network['ESSID'], essid,
                 network['Security type'], network['Level'],
                 deviceName, model
                 )
             if (network['BSSID'], network['ESSID']) in self.stored:
-                print(colored(line, color='yellow'))
+                print(colored(line, color='yellow') + "\n")
             elif network['WPS locked']:
-                print(colored(line, color='red'))
+                print(colored(line, color='red') + "\n")
             elif self.vuln_list and (model in self.vuln_list):
-                print(colored(line, color='green'))
+                print(colored(line, color='green') + "\n")
             else:
-                print(line)
+                print(line + "\n")
 
         return network_list
 
@@ -1012,11 +1010,11 @@ class WiFiScanner:
 ''')
         networks = self.iw_scanner()
         if not networks:
-            print('[-] No WPS networks found.')
+            print('[-] NO WPS NETWORKS FOUND !')
             return
         while 1:
             try:
-                networkNo = input('Select target (press Enter to refresh): ')
+                networkNo = input(' ENTER YOUR TYPE : ')
                 if networkNo.lower() in ('r', '0', ''):
                     return self.prompt_network()
                 elif int(networkNo) in networks.keys():
