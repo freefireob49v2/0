@@ -1,25 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Colors for output
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
-echo -e "${GREEN}[+] Updating packages...${RESET}"
-pkg update -y && pkg upgrade -y
-
-echo -e "${GREEN}[+] Installing required packages...${RESET}"
-pkg install root-repo -y
-pkg install git tsu python wpa-supplicant pixiewps iw -y
-
-# Check directory and clone
-if [ ! -d "0" ] && [ ! -f "0.py" ]; then
-    echo -e "${GREEN}[+] Cloning 0 repository...${RESET}"
-    git clone https://github.com/freefireob49v2/0
-    cd 0 || exit
-elif [ -d "0" ]; then
-    cd 0 || exit
-fi
+echo -e "${GREEN}[+] Setting up local 0 environment...${RESET}"
 
 echo -e "${GREEN}[+] Installing Python dependencies...${RESET}"
 pip install -r requirements.txt --break-system-packages
@@ -48,8 +33,6 @@ if [ "\$1" == "update" ]; then
     chmod +x 0.py
 
     echo -e "\033[1;32m[+] Re-applying 0 command setup...\033[0m"
-    0_BIN_INNER="$BIN_DIR/0"
-    SCRIPT_DIR_INNER="$SCRIPT_DIR"
     bash 1.sh > /dev/null 2>&1
 
     echo -e "\033[1;32m[✓] 0 updated successfully!\033[0m"
@@ -96,8 +79,7 @@ EOF
 
 chmod +x "$0_BIN"
 
-echo -e "\n${GREEN}[✓] Setup complete successfully!${RESET}"
-echo -e "${YELLOW}[✓] You don't even need to restart Termux.${RESET}"
+echo -e "\n${GREEN}[✓] Local setup complete!${RESET}"
 
 echo -e "\n\033[1;36m╔══════════════════════════════════════════════╗\033[0m"
 echo -e "\033[1;36m║           📌  READ THIS CAREFULLY            ║\033[0m"
