@@ -1011,18 +1011,19 @@ class WiFiScanner:
         if not networks:
 
             if not self.wifi_status():
-                print('[!] WI-FI IS OFF')
+                print('[!] WI-FI IS OFF !')
                 print()
                 input('[+] PRESS ENTER TO TURN ON WI-FI : ')
 
                 os.system("su -c 'svc wifi enable'")
-                time.sleep(3)
+                time.sleep(0.1)
 
                 return self.prompt_network()
 
             else:
                 print('[-] NO WPS NETWORKS FOUND !')
-
+                print()
+                input('[+] PRESS ENTER TO SCAN AGAIN : ')
                 return self.prompt_network()
         while 1:
             try:
