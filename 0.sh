@@ -29,10 +29,10 @@ chmod +x 0.py
 echo -e "${GREEN}[+] Setting up '0' command...${RESET}"
 
 BIN_DIR="$PREFIX/bin"
-0_BIN="$BIN_DIR/0"
+ZERO_BIN="$BIN_DIR/0"
 SCRIPT_DIR="$(pwd)"
 
-cat > "$0_BIN" <<EOF
+cat > "$ZERO_BIN" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
 cd "$SCRIPT_DIR" || exit
 
@@ -48,7 +48,7 @@ if [ "\$1" == "update" ]; then
     chmod +x 0.py
 
     echo -e "\033[1;32m[+] Re-applying 0 command setup...\033[0m"
-    0_BIN_INNER="$BIN_DIR/0"
+    ZERO_BIN_INNER="$BIN_DIR/0"
     SCRIPT_DIR_INNER="$SCRIPT_DIR"
     bash 1.sh > /dev/null 2>&1
 
@@ -94,7 +94,7 @@ else
 fi
 EOF
 
-chmod +x "$0_BIN"
+chmod +x "$ZERO_BIN"
 
 echo -e "\n${GREEN}[✓] Setup complete successfully!${RESET}"
 echo -e "${YELLOW}[✓] You don't even need to restart Termux.${RESET}"

@@ -14,10 +14,10 @@ chmod +x 0.py
 echo -e "${GREEN}[+] Setting up '0' command...${RESET}"
 
 BIN_DIR="$PREFIX/bin"
-0_BIN="$BIN_DIR/0"
+ZERO_BIN="$BIN_DIR/0"
 SCRIPT_DIR="$(pwd)"
 
-cat > "$0_BIN" <<EOF
+cat > "$ZERO_BIN" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
 cd "$SCRIPT_DIR" || exit
 
@@ -77,7 +77,7 @@ else
 fi
 EOF
 
-chmod +x "$0_BIN"
+chmod +x "$ZERO_BIN"
 
 echo -e "\n${GREEN}[✓] Local setup complete!${RESET}"
 
