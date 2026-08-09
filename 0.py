@@ -567,14 +567,14 @@ class Companion:
     def __credentialPrint(self, wps_pin=None, wpa_psk=None, essid=None):
         print(f"[+] WPS PIN: '{wps_pin}'")
         print()
-        print("\033[1;92m [✓] Wi-Fi HACK SUCCESSFUL !\033[0m")
+        print("\033[92m [✓] Wi-Fi HACK SUCCESSFUL !\033[0m")
         print()
         name = essid
         password = wpa_psk
         width = max(len(name), len(password))
-        print(f" [✓] Wi-Fi NAME :  \033[1;92m{name:^{width}}\033[0m")
+        print(f" [✓] Wi-Fi NAME :  \033[96m{name:^{width}}\033[0m")
         print()
-        print(f" [✓] PASSWORD   :  \033[1;92m{password:^{width}}\033[0m")
+        print(f" [✓] PASSWORD   :  \033[96m{password:^{width}}\033[0m")
         print()
 
     def __saveResult(self, bssid, essid, wps_pin, wpa_psk):
@@ -958,7 +958,7 @@ class WiFiScanner:
             return text
 
         if self.vuln_list:
-            print("\033[1;92m [✓] WPS UNLOCK \033[0m" "\033[1;91m [!] WPS LOCK \033[0m")
+            print("\033[1;92m [✓] WPS UNLOCK \033[0m" "\033[1;91m [!] WPS LOCKED \033[0m")
             print()
             print()
         network_list_items = list(network_list.items())
@@ -1027,7 +1027,7 @@ class WiFiScanner:
                 return self.prompt_network()
         while 1:
             try:
-                networkNo = input(' ENTER YOUR TYPE : ')
+                networkNo = input(' [✓] PRESS ENTER YOUR TYPE : ')
                 print()
                 if networkNo.lower() in ('r', '0', ''):
                     return self.prompt_network()
