@@ -14,18 +14,6 @@ import statistics
 import csv
 from typing import Dict
 
-os.system("clear")
-
-print('''
-\033[1;92m
- ███╗   ███╗███████╗██╗  ██╗███████╗██████╗ ██╗   ██╗
- ████╗ ████║██╔════╝██║  ██║██╔════╝██╔══██╗╚██╗ ██╔╝
- ██╔████╔██║█████╗  ███████║█████╗  ██║  ██║ ╚████╔╝
- ██║╚██╔╝██║██╔══╝  ██╔══██║██╔══╝  ██║  ██║  ╚██╔╝
- ██║ ╚═╝ ██║███████╗██║  ██║███████╗██████╔╝   ██║
- ╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝    ╚═╝
- \033[0m
-''')
 class NetworkAddress:
     def __init__(self, mac):
         if isinstance(mac, int):
@@ -924,7 +912,6 @@ class WiFiScanner:
 
         for line in lines:
             if line.startswith('command failed:'):
-                print('[!] Error:', line)
                 return False
             line = line.strip('\t')
             for regexp, handler in matchers.items():
@@ -997,7 +984,11 @@ class WiFiScanner:
                 print(line + "\n")
 
         return network_list
-
+    def wifi_status(self):
+        result = subprocess.getoutput("su -c 'dumpsys wifi | grep \"Wi-Fi is\"'")
+        if "enabled" in result.lower():
+            return True
+        return False
     def prompt_network(self) -> str:
         os.system("clear")
 
@@ -1011,11 +1002,28 @@ class WiFiScanner:
  ╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝    ╚═╝
  \033[0m
 ''')
+        ifaceUp(self.interface, down=True)
+        time.sleep(0.1)
+        ifaceUp(self.interface)
+        time.sleep(0.1)
         networks = self.iw_scanner()
+
         if not networks:
-            print('[-] NO WPS NETWORKS FOUND !')
-            print()
-            return
+
+            if not self.wifi_status():
+                print('[!] WI-FI IS OFF')
+                print()
+                input('[+] PRESS ENTER TO TURN ON WI-FI : ')
+
+                os.system("su -c 'svc wifi enable'")
+                time.sleep(3)
+
+                return self.prompt_network()
+
+            else:
+                print('[-] NO WPS NETWORKS FOUND !')
+
+                return self.prompt_network()
         while 1:
             try:
                 networkNo = input(' ENTER YOUR TYPE : ')
@@ -1036,7 +1044,12 @@ def ifaceUp(iface, down=False):
     else:
         action = 'up'
     cmd = 'ip link set {} {}'.format(iface, action)
-    res = subprocess.run(cmd, shell=True, stdout=sys.stdout, stderr=sys.stdout)
+    res = subprocess.run(
+    cmd,
+    shell=True,
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL
+)
     if res.returncode == 0:
         return True
     else:
@@ -1050,7 +1063,7 @@ def die(msg):
 
 def usage():
     return """
-OneShotPin 0.0.2 (c) 2017 rofl0r, modded by Ꮇᴇͥʜͣᴇͫᴅƴ
+OneShotPin 0.0.2 (c) 2016 rofl0r, MODDED BY Ꮇᴇͥʜͣᴇͫᴅƴ
 
 %(prog)s <arguments>
 
@@ -1068,7 +1081,7 @@ Advanced arguments:
     -w, --write              : Write AP credentials to the file on success
     -F, --pixie-force        : Run Pixiewps with --force option (bruteforce full range)
     -X, --show-pixie-cmd     : Always print Pixiewps command
-    --vuln-list=<filename>   : Use custom file with vulnerable devices list ['1.txt']
+    --vuln-list=<filename>   : Use custom file with vulnerable devices list ['0.txt']
     --iface-down             : Down network interface when the work is finished
     -l, --loop               : Run in a loop
     -r, --reverse-scan       : Reverse order of networks in the list of networks. Useful on small displays
@@ -1141,7 +1154,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--vuln-list',
         type=str,
-        default=os.path.dirname(os.path.realpath(__file__)) + '/1.txt',
+        default=os.path.dirname(os.path.realpath(__file__)) + '/0.txt',
         help='Use custom file with vulnerable devices list'
     )
     parser.add_argument(
@@ -1167,8 +1180,7 @@ if __name__ == '__main__':
     if os.getuid() != 0:
         die("Run it as root")
 
-    if not ifaceUp(args.interface):
-        die('Unable to up interface "{}"'.format(args.interface))
+    ifaceUp(args.interface)
 
     while True:
         try:

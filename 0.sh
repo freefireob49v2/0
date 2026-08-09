@@ -22,7 +22,7 @@ elif [ -d "0" ]; then
 fi
 
 echo -e "${GREEN}[+] Installing Python dependencies...${RESET}"
-pip install -r requirements.txt --break-system-packages
+
 
 chmod +x 0.py
 
@@ -41,9 +41,6 @@ if [ "\$1" == "update" ]; then
     echo -e "\033[1;32m[+] Fetching latest updates from MSR's GitHub...\033[0m"
     git reset --hard HEAD > /dev/null 2>&1
     git pull origin main
-
-    echo -e "\033[1;32m[+] Checking for new requirements...\033[0m"
-    pip install -r requirements.txt --break-system-packages > /dev/null 2>&1
 
     chmod +x 0.py
 
