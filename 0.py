@@ -572,9 +572,9 @@ class Companion:
         name = essid
         password = wpa_psk
         width = max(len(name), len(password))
-        print(f" [✓] Wi-Fi NAME :  \033[96m{name:^{width}}\033[0m")
+        print(f" [✓] Wi-Fi NAME :  \033[1;96m{name:^{width}}\033[0m")
         print()
-        print(f" [✓] PASSWORD   :  \033[96m{password:^{width}}\033[0m")
+        print(f" [✓] PASSWORD   :  \033[1;96m{password:^{width}}\033[0m")
         print()
 
     def __saveResult(self, bssid, essid, wps_pin, wpa_psk):
@@ -958,7 +958,7 @@ class WiFiScanner:
             return text
 
         if self.vuln_list:
-            print("\033[1;92m [✓] WPS UNLOCK \033[0m" "\033[1;91m [!] WPS LOCKED \033[0m")
+            print("\033[1;92m [✓] WPS UNLOCK  \033[0m" "\033[1;91m [!] WPS LOCKED  \033[0m" "\033[1;97m [?] WPS CONFUSED\033[0m")
             print()
             print()
         network_list_items = list(network_list.items())
